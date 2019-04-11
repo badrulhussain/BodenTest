@@ -2,43 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using App.Repository;
 
-namespace App
+namespace App.Service
 {
-    public class CustomerService
+    public class CustomerService : ICustomerService
     {
-        public bool AddCustomer(string firname, string surname, string email, DateTime dateOfBirth, int companyId)
+        private readonly ICompanyRepository _companyRepository;
+
+        public CustomerService(ICompanyRepository companyRepository)
         {
-            if (string.IsNullOrEmpty(firname) || string.IsNullOrEmpty(surname))
+            _companyRepository = companyRepository;
+        }
+
+        public bool AddCustomer(Customer customer)
+        {
+            if(!IsCustomerVaild(customer))
             {
                 return false;
             }
 
-            if (!email.Contains("@") && !email.Contains("."))
-            {
-                return false;
-            }
+            var company = _companyRepository.GetById(customer.Company.Id);
 
-            var now = DateTime.Now;
-            int age = now.Year - dateOfBirth.Year;
-            if (now.Month < dateOfBirth.Month || (now.Month == dateOfBirth.Month && now.Day < dateOfBirth.Day)) age--;
-
-            if (age < 21)
-            {
-                return false;
-            }
-
-            var companyRepository = new CompanyRepository();
-            var company = companyRepository.GetById(companyId);
-
-            var customer = new Customer
-                               {
-                                   Company = company,
-                                   DateOfBirth = dateOfBirth,
-                                   EmailAddress = email,
-                                   Firstname = firname,
-                                   Surname = surname
-                               };
+            customer.Company = company;
 
             if (company.Name == "VeryImportantClient")
             {
@@ -73,6 +59,31 @@ namespace App
             }
 
             CustomerDataAccess.AddCustomer(customer);
+
+            return true;
+        }
+
+        private bool IsCustomerVaild(Customer customer)
+        {
+            if (string.IsNullOrEmpty(customer.Firstname) || string.IsNullOrEmpty(customer.Surname))
+            {
+                return false;
+            }
+
+            if (!customer.EmailAddress.Contains("@") && !customer.EmailAddress.Contains("."))
+            {
+                return false;
+            }
+
+            var now = DateTime.Now;
+            int age = now.Year - customer.DateOfBirth.Year;
+            if (now.Month < customer.DateOfBirth.Month ||
+                (now.Month == customer.DateOfBirth.Month && now.Day < customer.DateOfBirth.Day)) age--;
+
+            if (age < 21)
+            {
+                return false;
+            }
 
             return true;
         }
