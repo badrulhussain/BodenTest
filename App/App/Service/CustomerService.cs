@@ -2,19 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using App.Repository;
 
 namespace App.Service
 {
     public class CustomerService : ICustomerService
     {
-        private readonly ICompanyRepository _companyRepository;
-
-        public CustomerService(ICompanyRepository companyRepository)
-        {
-            _companyRepository = companyRepository;
-        }
-
         public bool AddCustomer(Customer customer)
         {
             if(!IsCustomerVaild(customer))
@@ -22,7 +14,8 @@ namespace App.Service
                 return false;
             }
 
-            var company = _companyRepository.GetById(customer.Company.Id);
+            var companyRepository = new CompanyRepository();
+            var company = companyRepository.GetById(customer.Company.Id);
 
             customer.Company = company;
 

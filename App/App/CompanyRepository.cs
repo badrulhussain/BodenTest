@@ -6,9 +6,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
-namespace App.Repository
+namespace App
 {
-    public class CompanyRepository : ICompanyRepository
+    public class CompanyRepository
     {
         public Company GetById(int id)
         {

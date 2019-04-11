@@ -5,7 +5,6 @@ namespace App.App_Start
 {
     using System;
     using System.Web;
-    using App.Repository;
     using App.Service;
     //using System.Web.Http;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -46,7 +45,6 @@ namespace App.App_Start
             //kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             IKernel ninjectKernel = new StandardKernel();
             ninjectKernel.Bind<ICustomerService>().To<CustomerService>();
-            ninjectKernel.Bind<ICompanyRepository>().To<CompanyRepository>();
 
             RegisterServices(kernel);
             return kernel;
