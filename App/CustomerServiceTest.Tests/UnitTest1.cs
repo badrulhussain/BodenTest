@@ -22,7 +22,7 @@ namespace CustomerServiceTest.Tests
             {
                 Firstname = "Bruce",
                 Surname = "Wayne",
-                EmailAddress = "Bruce.Wayne@GothamCity.com",
+                EmailAddress = "Bruce.Wayne@WayneEnterprises.com",
                 DateOfBirth = new DateTime(1939, 3, 1),
                 Company = new Company()
                 {
